@@ -1,0 +1,67 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+    package="edu.training.wearbountyhunter">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="edu.training.wearbountyhunter.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="edu.training.wearbountyhunter.permission.C2D_MESSAGE" />
+
+    <application
+        android:name=".ApplicationClass"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity android:name=".Home"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".AgregarActivity" android:label="@string/title_activity_agregar" />
+        <activity android:name=".DetalleActivity" android:label="@string/title_activity_detalle" />
+
+        <receiver android:name=".ReceiverNotificacion">
+            <intent-filter>
+                <action android:name="edu.training.wearbountyhunter.VOZ" />
+            </intent-filter>
+        </receiver>
+        
+        <!--RECEIVER-->
+        <receiver android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.example.gcm" />
+            </intent-filter>
+        </receiver>
+
+        <!--LISTENER SERVICE-->
+        <service android:name="edu.training.wearbountyhunter.MiGcmListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <!--INSTANCE ID LISTENER-->
+        <service android:name="edu.training.wearbountyhunter.MiInstanceIDListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        
+    </application>
+
+</manifest>

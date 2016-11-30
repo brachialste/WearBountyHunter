@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Mensaje"
+        android:id="@+id/lblMensaje"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Text"
+        android:id="@+id/lblContenido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblMensaje"
+        android:layout_alignStart="@+id/lblMensaje"
+        android:layout_marginTop="10dp"/>
+
+    <android.support.wearable.view.DelayedConfirmationView
+        android:id="@+id/delayed_confirm"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:circle_border_color="#00BCFF"
+        app:circle_border_width="4dp"
+        app:circle_radius="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/lblContenido"
+        android:layout_marginBottom="23dp">
+    </android.support.wearable.view.DelayedConfirmationView>
+
+    <TextView
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Guardar..."
+        android:id="@+id/lblGuardar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/delayed_confirm"
+        android:layout_toEndOf="@+id/delayed_confirm"
+        android:layout_marginTop="9dp"/>
+
+</RelativeLayout>

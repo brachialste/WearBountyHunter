@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ibtnAgregar"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/iconoaplicacion"
+        android:onClick="agregar"
+        android:layout_marginBottom="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/txtFugitivos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fugitivos"/>
+        <TextView
+            android:id="@+id/txtCapturados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Capturados"
+            android:layout_marginLeft="15dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:elevation="4dp">
+
+        <android.support.wearable.view.CircularButton
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/fug"
+            android:color="#a74646"
+            android:onClick="mostrarFugitivos"
+            android:id="@+id/btnRojo"
+            android:clickable="true"
+        />
+
+        <android.support.wearable.view.CircularButton
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/capt"
+            android:color="#44529e"
+            android:onClick="mostrarCapturados"
+            android:id="@+id/btnAzul"
+            android:clickable="true"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
