@@ -2,12 +2,29 @@
     package="edu.training.wearbountyhunter">
 
     <uses-feature android:name="android.hardware.type.watch" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/iconoaplicacion"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.DeviceDefault">
+        android:theme="@android:style/Theme.DeviceDefault.Light">
+
+        <uses-library android:name="com.google.android.wearable" android:required="false" />
+
+        <activity android:name=".Principal"
+            android:label="Fugitivos">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ActivityDetalle" />
+        <activity android:name=".DelayMessage" />
+        <activity android:name="android.support.wearable.activity.ConfirmationActivity" />
 
     </application>
 
