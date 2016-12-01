@@ -46,7 +46,12 @@ public class MiGcmListenerService extends GcmListenerService {
                         notificacionesBuilder.notificacionGeneral("PUSH IGNORADA", "Ya se cuentan con figutivos localmente");
                         Toast.makeText(this, "Ya se cuentan con fugitivos en la base de datos (PUSH IGNORADA)", Toast.LENGTH_LONG).show();
                     }
-                }else{
+                } else if(UDIDNube.equalsIgnoreCase("Alarma de Temperatura")) {
+                    // se obtiene la temperatura de referencia
+                    String temperaturareferencia = jsonObject.getString("tempReferencia");
+                    notificacionesBuilder = new NotificacionesBuilder(this);
+                    notificacionesBuilder.notificacionVozAlarma(temperaturareferencia);
+                } else{
                     Toast.makeText(this, "La notificacion se envio por device token y no por topico.", Toast.LENGTH_LONG).show();
                 }
             }

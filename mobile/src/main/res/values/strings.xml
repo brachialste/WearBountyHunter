@@ -12,4 +12,8 @@
     <string name="campo_nombre">Nombre del Fugitivo</string>
     <string name="title_activity_agregar">Nuevo Fugitivo</string>
     <string name="title_activity_detalle">Detalle Fugitivo</string>
+    <string-array name="respuestas">
+        <item>Encender</item>
+        <item>No</item>
+    </string-array>
 </resources>

@@ -23,10 +23,20 @@ public class NotificacionesBuilder {
             .setLabel(replyLabel)
             .build();
 
+    // Respuestas que se encuentran en el archivo de strings
+    String[] respuestas;
+    // Input remoto para voz con opciones
+    RemoteInput remoteInputAlarma;
+
     private Context context;
 
     public NotificacionesBuilder(Context context) {
         this.context = context;
+        respuestas = context.getResources().getStringArray(R.array.respuestas);
+        remoteInputAlarma = new RemoteInput.Builder(EXTRA_VOICE_REPLY)
+                .setLabel(replyLabel)
+                .setChoices(respuestas)
+                .build();
     }
 
     // metodo para la notificacion enviada con capacidades para voz en el wear
@@ -140,6 +150,46 @@ public class NotificacionesBuilder {
                 NotificationManagerCompat.from(context);
 
         // se lanza la notifiacion
+        notificationManagerCompat.notify(notificacionId, notification);
+    }
+
+    // metodo para la notificacion enviada con capacidades para voz en el wear
+    public void notificacionVozAlarma(String temperatura){
+        int notificacionId = 4;
+
+        // se define el texto en un formato extendido por medio del BigTextStyle para ser
+        // añadido a la notificacion
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle.bigText(Html.fromHtml("<h2>Alarma de Temperatura</h2><br>" +
+                "<b>La temperatura subió por encima de " + temperatura + " °C<b>"));
+
+        // se crea el intent y el pending intent para el envio del anuncio global
+        Intent replyIntent = new Intent("edu.training.wearbountyhunter.ALARMA");
+        PendingIntent replyPendingIntent =
+                PendingIntent.getBroadcast(context, 0, replyIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // creacion de la accion para la respuesta y agregando en input remoto
+        NotificationCompat.Action action =
+                new NotificationCompat.Action.Builder(android.R.drawable.ic_lock_idle_charging,
+                        "¿Encender?", replyPendingIntent)
+                        .addRemoteInput(remoteInputAlarma)
+                        .build();
+
+        // construccion de la notificacion y adicion de la accion mediante WereableExtender
+        Notification notification =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                        .setContentTitle("Responder a Alarma")
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .extend(new NotificationCompat.WearableExtender().addAction(action))
+                        .setStyle(bigTextStyle)
+                        .build();
+
+        // se obtiene una instancia del NotificacionManagerCompat
+        NotificationManagerCompat notificationManagerCompat =
+                NotificationManagerCompat.from(context);
+        // se lanza la notificacion
         notificationManagerCompat.notify(notificacionId, notification);
     }
 }

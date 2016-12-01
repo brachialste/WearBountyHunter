@@ -41,28 +41,49 @@ public class ReceiverNotificacion extends BroadcastReceiver {
 
         // se obtiene la secuencia de caracteres del intent que se disparo por Google Now
         String remoteInput = obtenerTextMensaje(intent) == null ? "" : obtenerTextMensaje(intent).toString();
-        if(remoteInput.length() > 0){
-            // se extrae el comando
-            String comando = remoteInput.substring(0, 9);
-            if(comando.equalsIgnoreCase("DESCARGAR")){
-                // se extrae el filtro
-                String filtro = remoteInput.substring(10);
+        if(intent.getAction().equalsIgnoreCase("edu.training.wearbountyhunter.VOZ")) {
+            if (remoteInput.length() > 0) {
+                // se extrae el comando
+                String comando = remoteInput.substring(0, 9);
+                if (comando.equalsIgnoreCase("DESCARGAR")) {
+                    // se extrae el filtro
+                    String filtro = remoteInput.substring(10);
 
+                    NetServices oNS = new NetServices(new OnTaskCompleted() {
+                        @Override
+                        public void onTaskCompleted(Object feed) {
+                            try {
+                                if (((String[]) feed).length > 0) {
+                                    NotificacionesBuilder notificacionesBuilder = new NotificacionesBuilder(classContext);
+                                    notificacionesBuilder.notificacionImportacion((String[]) feed);
+                                    Home.UpdateLists(0);
+                                } else {
+                                    NotificacionesBuilder notificacionesBuilder = new NotificacionesBuilder(classContext);
+                                    notificacionesBuilder.notificacionGeneral("Warning PULL", "Sin coincidencias en la nube.");
+                                }
+                            } catch (Exception ex) {
+                                Log.d("[EXCEPTION]", "Error al intentar actualizar las listas de fugitivos " + ex.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onTaskError(Object feed) {
+                            Toast.makeText(classContext, "Error al comunicarse con el WebService!!!", Toast.LENGTH_SHORT).show();
+                        }
+                    }, context);
+                    oNS.execute("FugitivosFiltro", filtro);
+                }
+            }
+        }
+        if (intent.getAction().equalsIgnoreCase("edu.training.wearbountyhunter.ALARMA")){
+            notificationId = 4;
+            // se extrae el comando
+            String comando = remoteInput;
+            if (comando.equalsIgnoreCase("encender")) {
                 NetServices oNS = new NetServices(new OnTaskCompleted() {
                     @Override
                     public void onTaskCompleted(Object feed) {
-                        try{
-                            if(((String[]) feed).length > 0){
-                                NotificacionesBuilder notificacionesBuilder = new NotificacionesBuilder(classContext);
-                                notificacionesBuilder.notificacionImportacion((String [])feed);
-                                Home.UpdateLists(0);
-                            }else{
-                                NotificacionesBuilder notificacionesBuilder = new NotificacionesBuilder(classContext);
-                                notificacionesBuilder.notificacionGeneral("Warning PULL", "Sin coincidencias en la nube.");
-                            }
-                        }catch (Exception ex){
-                            Log.d("[EXCEPTION]", "Error al intentar actualizar las listas de fugitivos " + ex.getMessage());
-                        }
+                        Toast.makeText(classContext, "Exito: " + feed.toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -70,9 +91,9 @@ public class ReceiverNotificacion extends BroadcastReceiver {
                         Toast.makeText(classContext, "Error al comunicarse con el WebService!!!", Toast.LENGTH_SHORT).show();
                     }
                 }, context);
-                oNS.execute("FugitivosFiltro", filtro);
+                oNS.execute("SignalR", comando);
             }
-        }else{
+        } else{
             Toast.makeText(context, "Comando incorrecto", Toast.LENGTH_SHORT).show();
         }
 

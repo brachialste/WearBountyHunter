@@ -34,6 +34,7 @@
         <receiver android:name=".ReceiverNotificacion">
             <intent-filter>
                 <action android:name="edu.training.wearbountyhunter.VOZ" />
+                <action android:name="edu.training.wearbountyhunter.ALARMA" />
             </intent-filter>
         </receiver>
         

@@ -38,6 +38,8 @@ public class NetServices extends AsyncTask<String, Void, Object> {
     Context contextUI;
     // Uri parala obtención de la temperatura via POST
     private static final String URL_WS_TEMPERATURA = "http://201.168.207.210/Services/wearLAB03.svc/ObtenerTemperatura";
+    // Uri parala obtención de la temperatura via POST
+    private static final String URL_WS_SIGNALR = "http://201.168.207.210/Services/SignalRConnection.svc/EncendidoMotor";
 
     public NetServices(OnTaskCompleted listener, Context context)
     {
@@ -140,6 +142,16 @@ public class NetServices extends AsyncTask<String, Void, Object> {
                 // se obtienen los fujitivos del JSON
                 JSONObject jaData = new JSONObject(sResp);
                 x = jaData.getString("sTemperatura");
+            }catch (Exception e){
+                exception = e;
+            }
+        }else if(params[0].equals("SignalR")){
+            Log.d("[NETSERVICES]", "SignalR");
+            try{
+                sResp = NetServices.connectSignalRMotor(URL_WS_SIGNALR, params[1]);
+                // se obtienen los fujitivos del JSON
+                JSONObject jaData = new JSONObject(sResp);
+                x = jaData.getBoolean("bExito");
             }catch (Exception e){
                 exception = e;
             }
@@ -334,6 +346,45 @@ public class NetServices extends AsyncTask<String, Void, Object> {
 
                 inputStream.close();
             }
+
+        }catch(Exception e){
+            Log.v("[CHECK]", e.toString());
+        }
+
+        return sRes;
+    }
+
+    public static String connectSignalRMotor(String purl, String comando) throws IOException {
+        URL url = new URL(purl);
+        URLConnection urlConnection = url.openConnection();
+        String sRes = "";
+
+        try{
+            HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestProperty("content-type", "application/json");
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.connect();
+
+            // parametros
+            OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("banderaEncendido", comando);
+            Log.d("[RequestJSON]", jsonObject.toString());
+            String urlParameters = jsonObject.toString();
+            writer.write(urlParameters);
+            writer.flush();
+
+            if(httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
+                // a simplemJSON reposnse read
+                InputStream inputStream = httpURLConnection.getInputStream();
+                String result = convertStreamToString(inputStream);
+                Log.v("[CHECK]", result);
+                sRes = result;
+
+                inputStream.close();
+            }
+
 
         }catch(Exception e){
             Log.v("[CHECK]", e.toString());
