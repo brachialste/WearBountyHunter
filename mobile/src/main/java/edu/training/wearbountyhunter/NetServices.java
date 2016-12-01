@@ -36,6 +36,8 @@ public class NetServices extends AsyncTask<String, Void, Object> {
     public static String[] Topicos = { "wearBountyHunter" };
     // contexto de la interfaz de usuario
     Context contextUI;
+    // Uri parala obtención de la temperatura via POST
+    private static final String URL_WS_TEMPERATURA = "http://201.168.207.210/Services/wearLAB03.svc/ObtenerTemperatura";
 
     public NetServices(OnTaskCompleted listener, Context context)
     {
@@ -127,6 +129,17 @@ public class NetServices extends AsyncTask<String, Void, Object> {
                 Log.v("[Respuesta_Reg_Topico]", jsData.toString());
                 sMsg = jsData.toString();
                 x = sMsg;
+            }catch (Exception e){
+                exception = e;
+            }
+        }else if(params[0].equals("Temperatura")){
+            Log.d("[NETSERVICES]", "Temperatura");
+            try{
+                sResp = NetServices.connectTemperatura(URL_WS_TEMPERATURA);
+                String[] aFlujs;
+                // se obtienen los fujitivos del JSON
+                JSONObject jaData = new JSONObject(sResp);
+                x = jaData.getString("sTemperatura");
             }catch (Exception e){
                 exception = e;
             }
@@ -292,6 +305,35 @@ public class NetServices extends AsyncTask<String, Void, Object> {
                 inputStream.close();
             }
 
+
+        }catch(Exception e){
+            Log.v("[CHECK]", e.toString());
+        }
+
+        return sRes;
+    }
+
+    public static String connectTemperatura(String purl) throws IOException{
+        URL url = new URL(purl);
+        URLConnection urlConnection = url.openConnection();
+        String sRes = "";
+        try{
+            HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.setDoOutput(false);
+            httpURLConnection.setConnectTimeout(500);
+            httpURLConnection.setReadTimeout(500);
+            httpURLConnection.connect();
+
+            if(httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
+                // a simplemJSON reposnse read
+                InputStream inputStream = httpURLConnection.getInputStream();
+                String result = convertStreamToString(inputStream);
+                Log.v("[CHECK]", result);
+                sRes = result;
+
+                inputStream.close();
+            }
 
         }catch(Exception e){
             Log.v("[CHECK]", e.toString());

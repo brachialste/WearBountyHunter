@@ -8,6 +8,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <permission android:name="edu.training.wearbountyhunter.permission.C2D_MESSAGE" android:protectionLevel="signature" />
     <uses-permission android:name="edu.training.wearbountyhunter.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".ApplicationClass"
@@ -61,6 +62,13 @@
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
+        <service android:name=".ServicioTemperatura" />
+        <receiver android:name=".ReceiverBoot">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="ANDRIOID.INTENT.CATEGORY.HOME" />
+            </intent-filter>
+        </receiver>
         
     </application>
 

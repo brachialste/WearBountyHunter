@@ -48,6 +48,8 @@ public class Home extends AppCompatActivity {
      */
     private static ViewPager mViewPager;
 
+    public static TextView txtTemperatura;
+
     public Home()
     {
         //Se inicializa el Manejador de Datos para evitar colisión de Conexiones...
@@ -86,6 +88,8 @@ public class Home extends AppCompatActivity {
         String UDIDDevice = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("[UDID]", UDIDDevice);
 
+        if(!ServicioTemperatura.isRunning())
+            startService(new Intent(this, ServicioTemperatura.class));
     }
 
 
@@ -270,6 +274,8 @@ public class Home extends AppCompatActivity {
                     false);
             // Se accede a los elementos ajustables del Fragment...
             RatingBar rbApp = ((RatingBar) iView.findViewById(R.id.ratingApp));
+
+            txtTemperatura = (TextView) iView.findViewById(R.id.txtTemperatura);
 
             String sRating = "0.0"; // Variable para lectura del Rating guardado
             // en el property.
